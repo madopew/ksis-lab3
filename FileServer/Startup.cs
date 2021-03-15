@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using FileServer.Services.Implementations;
+using FileServer.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
 
 namespace FileServer
@@ -23,8 +25,9 @@ namespace FileServer
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddJsonOptions(options =>
-                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+            services.AddControllers();
+
+            services.AddSingleton<IFileService, LocalFileService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
