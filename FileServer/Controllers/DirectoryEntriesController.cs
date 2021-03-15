@@ -1,33 +1,64 @@
-﻿using System.Collections.Generic;
-using FileServer.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using FileServer.Models;
+using FileServer.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FileServer.Controllers
 {
     [ApiController]
-    [Route("api/dir")]
+    [Route("api/fs")]
     public class DirectoryEntriesController : ControllerBase
     {
-        private readonly IFileServerRepository _repository = new MockFileServerRepository();
-        
-        [HttpGet]
-        public ActionResult<IEnumerable<DirectoryEntry>> GetRootContents()
+        private readonly IFileService _fileService;
+        public DirectoryEntriesController(IFileService fileService)
         {
-            var result = _repository.GetRootContents();
-            return Ok(result);
+            _fileService = fileService;
         }
 
-        [HttpGet("{id:int}")]
-        public ActionResult<IEnumerable<DirectoryEntry>> GetContents(int id)
+        [HttpGet("list")]
+        public ActionResult<IEnumerable<DirectoryEntry>> GetRootContents()
         {
-            if (id < 0 || id > 2)
+            return GetPathContents(string.Empty);
+        }
+        
+        [HttpGet("list/{*path}")]
+        public ActionResult<IEnumerable<DirectoryEntry>> GetPathContents(string path)
+        {
+            IEnumerable<DirectoryEntry> content;
+            try
             {
-                return BadRequest();
+                content = _fileService.GetDirectoryEntries(path);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
+            return Ok(content);
+        }
+
+        [HttpPost("create")]
+        public ActionResult CreateDirectoryRoot(string name)
+        {
+            return CreateDirectory(string.Empty, name);
+        }
+
+        [HttpPost("create/{*path}")]
+        public ActionResult CreateDirectory(string path, string name)
+        {
+            DirectoryEntry entry;
+            try
+            {
+                entry = _fileService.CreateDirectory(path, name);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
             }
 
-            var result = _repository.GetDirectoryContents(id);
-            return Ok(result);
+            return Ok(entry);
         }
     }
 }
