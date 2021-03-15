@@ -10,7 +10,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 
-namespace server
+namespace FileServer
 {
     public class Startup
     {
