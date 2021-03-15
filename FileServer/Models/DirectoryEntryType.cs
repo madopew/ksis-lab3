@@ -3,6 +3,6 @@
     public enum DirectoryEntryType
     {
         Directory,
-        File
+        File,
     }
 }
