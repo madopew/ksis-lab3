@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using FileServer.Models;
 using FileServer.Services.Interfaces;
@@ -11,10 +12,10 @@ namespace FileServer.Controllers
     [Route("api/fs")]
     public class DirectoryEntriesController : ControllerBase
     {
-        private readonly IFileService _fileService;
+        private readonly IFileService fileService;
         public DirectoryEntriesController(IFileService fileService)
         {
-            _fileService = fileService;
+            this.fileService = fileService;
         }
 
         [HttpGet("list")]
@@ -29,7 +30,7 @@ namespace FileServer.Controllers
             IEnumerable<DirectoryEntry> content;
             try
             {
-                content = _fileService.GetDirectoryEntries(path);
+                content = fileService.GetDirectoryEntries(path);
             }
             catch (ArgumentException ex)
             {
@@ -51,7 +52,7 @@ namespace FileServer.Controllers
             DirectoryEntry entry;
             try
             {
-                entry = _fileService.CreateDirectory(path, name);
+                entry = fileService.CreateDirectory(path, name);
             }
             catch (ArgumentException ex)
             {
@@ -59,6 +60,43 @@ namespace FileServer.Controllers
             }
 
             return Ok(entry);
+        }
+
+        [HttpGet("download/{*path}")]
+        public ActionResult DownloadFile(string path)
+        {
+            FileContent result;
+            try
+            {
+                result = fileService.GetFile(path);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return File(result.FileStream, result.ContentType);
+        }
+
+        [HttpDelete("delete")]
+        public ActionResult DeleteRoot()
+        {
+            return DeleteEntry(string.Empty);
+        }
+
+        [HttpDelete("delete/{*path}")]
+        public ActionResult DeleteEntry(string path)
+        {
+            try
+            {
+                fileService.DeleteEntry(path);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return Ok();
         }
     }
 }
