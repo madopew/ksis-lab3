@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using FileServer.Models;
 using FileServer.Services.Interfaces;
+using MimeTypes;
 
 namespace FileServer.Services.Implementations
 {
@@ -72,6 +73,58 @@ namespace FileServer.Services.Implementations
                 Name = createdDirectory.Name,
                 Path = Normalize(directoryPath),
             };
+        }
+
+        public FileContent GetFile(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                throw new ArgumentException("Not a file");
+            }
+
+            var absolutePath = Path.Combine(RootPath, path);
+            absolutePath = Path.GetFullPath(absolutePath);
+
+            if (!File.Exists(absolutePath))
+            {
+                throw new ArgumentException("File does not exist!");
+            }
+
+            var fileInfo = new FileInfo(absolutePath);
+            var fileStream = new FileStream(absolutePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            var type = MimeTypeMap.GetMimeType(fileInfo.Extension);
+            return new FileContent
+            {
+                FileStream = fileStream,
+                ContentType = type,
+            };
+        }
+
+        public void DeleteEntry(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                Directory.Delete(RootPath, true);
+                Directory.CreateDirectory(RootPath);
+            }
+            else
+            {
+                var absolutePath = Path.Combine(RootPath, path);
+                absolutePath = Path.GetFullPath(absolutePath);
+
+                if (File.Exists(absolutePath))
+                {
+                    File.Delete(absolutePath);
+                }
+                else if (Directory.Exists(absolutePath))
+                {
+                    Directory.Delete(absolutePath, true);
+                }
+                else
+                {
+                    throw new ArgumentException("There is no such directory nor file");
+                }
+            }
         }
 
         private static DirectoryEntry GetParentDirectory(string childAbsolutePath)
