@@ -5,10 +5,22 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
              d:DesignHeight="50" d:DesignWidth="350"
-             Background="Transparent"
+             Cursor="Hand"
+             MouseDoubleClick="FileContentView_OnMouseDoubleClick"
              DataContext="{Binding RelativeSource={RelativeSource Self}}">
-    <StackPanel Orientation="Horizontal"
-                Background="Transparent">
+    <UserControl.Style>
+        <Style TargetType="UserControl">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#006064"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="False">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Style>
+    <StackPanel Orientation="Horizontal">
         <TextBlock FontFamily="Courier New"
                    Foreground="White"
                    Width="150"

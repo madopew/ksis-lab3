@@ -1,24 +1,30 @@
 ﻿using System;
 using System.Windows.Controls;
+using System.Windows.Input;
+using FileApiClient.Models;
 
 namespace FileApiClient.Views
 {
-    public partial class FileContentView : UserControl
+    public partial class FileContentView
     {
-        public string FileName { get; }
-        private DateTime Date { get; }
-        private long Size { get; }
-
+        private Action<object, MouseButtonEventArgs> doubleClick;
+        public DirectoryEntry Entry { get; set; }
+        public string FileName => Entry.Name;
         public string DateStr =>
-            (Date == DateTime.MinValue) ? "" : $"{Date.ToShortTimeString()} {Date.ToShortDateString()}";
-        public string SizeStr => (Size == -1) ? "<dir>" : Size.ToString();
-        
-        public FileContentView(string name, DateTime date, long size)
+            (Entry.LastModified == DateTime.MinValue) ? "" : $"{Entry.LastModified.ToShortTimeString()} " +
+                                                             $"{Entry.LastModified.ToShortDateString()}";
+        public string SizeStr => (Entry.Size == -1) ? "<dir>" : Entry.Size.ToString();
+
+        public FileContentView(DirectoryEntry entry, Action<object, MouseButtonEventArgs> onDoubleClick)
         {
-            FileName = name;
-            Date = date;
-            Size = size;
+            Entry = entry;
+            doubleClick = onDoubleClick;
             InitializeComponent();
+        }
+
+        private void FileContentView_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            doubleClick(sender, e);
         }
     }
 }

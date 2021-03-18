@@ -66,13 +66,29 @@ namespace FileApiClient
 
         private void AddToPanel(DirectoryEntry entry)
         {
-            var fContent = new FileContentView(entry.Name, entry.LastModified, entry.Size);
+            var fContent = new FileContentView(entry, Entry_OnDoubleClick);
             FilesPanel.Children.Add(fContent);
         }
 
         private void UpdateButton_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             CurrentPath = "";
+        }
+
+        private void Entry_OnDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is FileContentView view)
+            {
+                switch (view.Entry.Type)
+                {
+                    case DirectoryEntryType.Directory:
+                        CurrentPath = view.Entry.Path;
+                        break;
+                    case DirectoryEntryType.File:
+                        //TODO
+                        break;
+                }
+            }
         }
     }
 }
