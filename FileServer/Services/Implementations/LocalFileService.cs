@@ -13,7 +13,7 @@ namespace FileServer.Services.Implementations
 
         public IEnumerable<DirectoryEntry> GetDirectoryEntries(string path)
         {
-            var directoryPath = Path.Combine(RootPath, path);
+            var directoryPath = Path.Join(RootPath, path);
             directoryPath = Path.GetFullPath(directoryPath);
             
             if (!Directory.Exists(directoryPath))
@@ -48,7 +48,7 @@ namespace FileServer.Services.Implementations
 
         public DirectoryEntry CreateDirectory(string parentPath, string name)
         {
-            var parentAbsolutePath = Path.Combine(RootPath, parentPath);
+            var parentAbsolutePath = Path.Join(RootPath, parentPath);
             parentAbsolutePath = Path.GetFullPath(parentAbsolutePath);
             
             if (!Directory.Exists(parentAbsolutePath))
@@ -87,7 +87,7 @@ namespace FileServer.Services.Implementations
                 throw new ArgumentException("Not a file");
             }
 
-            var absolutePath = Path.Combine(RootPath, path);
+            var absolutePath = Path.Join(RootPath, path);
             absolutePath = Path.GetFullPath(absolutePath);
 
             if (!File.Exists(absolutePath))
@@ -107,7 +107,7 @@ namespace FileServer.Services.Implementations
 
         public DirectoryEntry UploadFile(string parentPath, FileUpload file)
         {
-            var parentAbsolutePath = Path.Combine(RootPath, parentPath);
+            var parentAbsolutePath = Path.Join(RootPath, parentPath);
             parentAbsolutePath = Path.GetFullPath(parentAbsolutePath);
             
             if (!Directory.Exists(parentAbsolutePath))
@@ -168,7 +168,7 @@ namespace FileServer.Services.Implementations
             }
             else
             {
-                var absolutePath = Path.Combine(RootPath, path);
+                var absolutePath = Path.Join(RootPath, path);
                 absolutePath = Path.GetFullPath(absolutePath);
 
                 if (File.Exists(absolutePath))
