@@ -113,7 +113,7 @@ namespace FileServer.Controllers
             {
                 result = fileService.UploadFile(path, fileUpload);
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
             }

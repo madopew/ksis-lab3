@@ -38,6 +38,10 @@
           <HintPath>..\packages\FontAwesome.WPF.4.7.0.9\lib\net40\FontAwesome.WPF.dll</HintPath>
           <Private>True</Private>
         </Reference>
+        <Reference Include="MimeTypes, Version=2.3.2.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\MimeTypeMapOfficial.1.0.15\lib\net452\MimeTypes.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="mscorlib" />
         <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
           <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>

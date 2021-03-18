@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -15,6 +16,8 @@ using FileApiClient.Annotations;
 using FileApiClient.Models;
 using FileApiClient.Views;
 using Microsoft.Win32;
+using MimeTypes;
+using Newtonsoft.Json;
 
 namespace FileApiClient
 {
@@ -122,6 +125,49 @@ namespace FileApiClient
             {
                 var name = createDialog.FolderName;
                 var result = await client.PostAsync($"{ApiUrl}/create/{CurrentPath}?name={name}", null);
+                if (result.IsSuccessStatusCode)
+                {
+                    UpdatePanel();
+                }
+                else
+                {
+                    var response = await result.Content.ReadAsStringAsync();
+                    MessageBox.Show(response, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private async void UploadButton_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var openDialog = new OpenFileDialog
+            {
+                Title = "Choose a file",
+                Filter = "Any file |*.*",
+                Multiselect = false,
+            };
+
+            if (openDialog.ShowDialog() == true)
+            {
+                var info = new FileInfo(openDialog.FileName);
+                FileUpload file;
+                using (var fileStream = new FileStream(openDialog.FileName, FileMode.Open))
+                {
+                    using (var memStream = new MemoryStream())
+                    {
+                        fileStream.CopyTo(memStream);
+                        file = new FileUpload
+                        {
+                            ContentType = MimeTypeMap.GetMimeType(info.Extension),
+                            Name = Path.GetFileNameWithoutExtension(info.Name),
+                            FileBase64 = Convert.ToBase64String(memStream.ToArray()),
+                        };
+                    }
+                }
+
+                var payload = JsonConvert.SerializeObject(file);
+                var content = new StringContent(payload, Encoding.UTF8, "application/json");
+                var result = await client.PostAsync($"{ApiUrl}/upload/{CurrentPath}", content);
+
                 if (result.IsSuccessStatusCode)
                 {
                     UpdatePanel();

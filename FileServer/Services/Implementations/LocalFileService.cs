@@ -146,7 +146,7 @@ namespace FileServer.Services.Implementations
                 throw new ArgumentException("File already exists!");
             }
 
-            var createdFile = new FileStream(fileAbsolutePath, FileMode.Create);
+            using var createdFile = new FileStream(fileAbsolutePath, FileMode.Create);
             createdFile.Write(Convert.FromBase64String(file.FileBase64));
 
             return new DirectoryEntry
