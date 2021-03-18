@@ -39,6 +39,8 @@
                                 VerticalAlignment="Center"
                                 FontWeight="Light"
                                 Cursor="Hand"
+                                Name="UploadButton"
+                                MouseLeftButtonUp="UploadButton_OnMouseLeftButtonUp"
                                 ToolTip="upload file"/>
                 <TextBlock Foreground="White"
                            Text="{Binding CurrentPath, StringFormat='/{0}'}"
