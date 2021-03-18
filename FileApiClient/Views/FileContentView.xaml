@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="FileApiClient.Views.FileContentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="50" d:DesignWidth="350"
+             Background="Transparent"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <StackPanel Orientation="Horizontal"
+                Background="Transparent">
+        <TextBlock FontFamily="Courier New"
+                   Foreground="White"
+                   Width="150"
+                   Text="{Binding FileName}"/>
+        <TextBlock FontFamily="Courier New"
+                   Foreground="White"
+                   Width="100"
+                   Text="{Binding SizeStr}"/>
+        <TextBlock FontFamily="Courier New"
+                   Foreground="White"
+                   Width="150"
+                   Text="{Binding DateStr}"/>
+    </StackPanel>
+</UserControl>

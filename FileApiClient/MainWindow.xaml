@@ -7,43 +7,48 @@
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="File API" Height="400" Width="500"
+        Title="File API" Height="400" Width="420"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid Background="#37474f">
         <StackPanel Margin="10">
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal"
+                        Margin="0 0 0 10">
                 <fa:FontAwesome Icon="Refresh"
                                 Foreground="White"
-                                FontSize="20"
+                                FontSize="10"
                                 Margin="0 0 10 0"
                                 VerticalAlignment="Center"
-                                FontWeight="Light"/>
+                                FontWeight="Light"
+                                Cursor="Hand"
+                                MouseLeftButtonUp="UpdateButton_OnMouseLeftButtonUp"/>
                 <TextBlock Foreground="White"
                            Text="{Binding CurrentPath}"
-                           FontSize="20"
-                           VerticalAlignment="Center"/>
+                           FontSize="10"
+                           VerticalAlignment="Center"
+                           FontFamily="Courier New"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal"
+                        Background="#62727b"
+                        Margin="0 0 0 2">
                 <TextBlock Foreground="White"
                            FontFamily="Courier New"
                            Width="150"
-                           Padding="15 0 0 0">
+                           Padding="5 0 0 0">
                     name
                 </TextBlock>
                 <TextBlock Foreground="White"
                            FontFamily="Courier New"
-                           Width="50">
+                           Width="100">
                     size
                 </TextBlock>
                 <TextBlock Foreground="White"
                            FontFamily="Courier New"
-                           Width="50">
+                           Width="150">
                     date
                 </TextBlock>
             </StackPanel>
-            <StackPanel Name="FilesPanel">
-                
-            </StackPanel>
+            <StackPanel Name="FilesPanel"
+                        Background="#62727b"/>
         </StackPanel>
     </Grid>
 </Window>
