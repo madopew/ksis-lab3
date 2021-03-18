@@ -22,7 +22,7 @@
                                 Cursor="Hand"
                                 MouseLeftButtonUp="UpdateButton_OnMouseLeftButtonUp"/>
                 <TextBlock Foreground="White"
-                           Text="{Binding CurrentPath}"
+                           Text="{Binding CurrentPath, StringFormat='/{0}'}"
                            FontSize="10"
                            VerticalAlignment="Center"
                            FontFamily="Courier New"/>
