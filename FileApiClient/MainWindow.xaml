@@ -20,7 +20,8 @@
                                 VerticalAlignment="Center"
                                 FontWeight="Light"
                                 Cursor="Hand"
-                                MouseLeftButtonUp="UpdateButton_OnMouseLeftButtonUp"/>
+                                MouseLeftButtonUp="UpdateButton_OnMouseLeftButtonUp"
+                                ToolTip="back to root"/>
                 <fa:FontAwesome Icon="Folder"
                                 Foreground="White"
                                 FontSize="10"
@@ -29,14 +30,16 @@
                                 FontWeight="Light"
                                 Cursor="Hand"
                                 Name="CreateFolderButton"
-                                MouseLeftButtonUp="CreateFolderButton_OnMouseLeftButtonUp"/>
+                                MouseLeftButtonUp="CreateFolderButton_OnMouseLeftButtonUp"
+                                ToolTip="create folder"/>
                 <fa:FontAwesome Icon="Upload"
                                 Foreground="White"
                                 FontSize="10"
                                 Margin="0 0 10 0"
                                 VerticalAlignment="Center"
                                 FontWeight="Light"
-                                Cursor="Hand"/>
+                                Cursor="Hand"
+                                ToolTip="upload file"/>
                 <TextBlock Foreground="White"
                            Text="{Binding CurrentPath, StringFormat='/{0}'}"
                            FontSize="10"
