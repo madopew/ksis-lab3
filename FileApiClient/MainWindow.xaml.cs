@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -11,6 +14,7 @@ using System.Windows.Media;
 using FileApiClient.Annotations;
 using FileApiClient.Models;
 using FileApiClient.Views;
+using Microsoft.Win32;
 
 namespace FileApiClient
 {
@@ -20,10 +24,12 @@ namespace FileApiClient
     public partial class MainWindow : INotifyPropertyChanged
     {
         private const string ApiUrl = "http://localhost:5000/api/fs";
+        private const string DownloadsFolder = "./Downloads";
+        
         private string currentPath;
         public string CurrentPath
         {
-            get => $"/{currentPath}";
+            get => currentPath;
             private set
             {
                 currentPath = value;
@@ -51,8 +57,7 @@ namespace FileApiClient
 
         private async void UpdatePanel()
         {
-            var requestUri = $"{ApiUrl}/list{CurrentPath}";
-            var result = await client.GetAsync(requestUri);
+            var result = await client.GetAsync($"{ApiUrl}/list/{CurrentPath}");
             if (!result.IsSuccessStatusCode)
             {
                 MessageBox.Show("Cannot list current directory", "Error", 
@@ -85,9 +90,28 @@ namespace FileApiClient
                         CurrentPath = view.Entry.Path;
                         break;
                     case DirectoryEntryType.File:
-                        //TODO
+                        SaveFile(view.Entry);
                         break;
                 }
+            }
+        }
+
+        private void SaveFile(DirectoryEntry file)
+        {
+            var downloadMsgRslt = MessageBox.Show($"Do you want to download file {file.Name}?", "Download",
+                MessageBoxButton.YesNo, MessageBoxImage.Question);
+            
+            if (!Directory.Exists(DownloadsFolder))
+            {
+                Directory.CreateDirectory(DownloadsFolder);
+            }
+
+            if (downloadMsgRslt == MessageBoxResult.Yes)
+            {
+                var webClient = new WebClient();
+                webClient.DownloadFile($"{ApiUrl}/download/{file.Path}", $"./Downloads/{file.Name}");
+                MessageBox.Show("Download complete!", "Download", MessageBoxButton.OK, MessageBoxImage.Information);
+                Process.Start(Path.GetFullPath(DownloadsFolder));
             }
         }
     }
