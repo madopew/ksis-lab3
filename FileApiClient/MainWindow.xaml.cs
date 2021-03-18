@@ -114,5 +114,24 @@ namespace FileApiClient
                 Process.Start(Path.GetFullPath(DownloadsFolder));
             }
         }
+
+        private async void CreateFolderButton_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var createDialog = new CreateFolderDialog();
+            if (createDialog.ShowDialog() == true)
+            {
+                var name = createDialog.FolderName;
+                var result = await client.PostAsync($"{ApiUrl}/create/{CurrentPath}?name={name}", null);
+                if (result.IsSuccessStatusCode)
+                {
+                    UpdatePanel();
+                }
+                else
+                {
+                    var response = await result.Content.ReadAsStringAsync();
+                    MessageBox.Show(response, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
     }
 }

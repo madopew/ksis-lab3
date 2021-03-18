@@ -89,6 +89,9 @@
             <Generator>MSBuild:Compile</Generator>
             <SubType>Designer</SubType>
         </ApplicationDefinition>
+        <Compile Include="Views\CreateFolderDialog.xaml.cs">
+          <DependentUpon>CreateFolderDialog.xaml</DependentUpon>
+        </Compile>
         <Compile Include="Views\FileContentView.xaml.cs">
           <DependentUpon>FileContentView.xaml</DependentUpon>
         </Compile>
@@ -104,6 +107,7 @@
             <DependentUpon>MainWindow.xaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
+        <Page Include="Views\CreateFolderDialog.xaml" />
         <Page Include="Views\FileContentView.xaml" />
     </ItemGroup>
     <ItemGroup>
