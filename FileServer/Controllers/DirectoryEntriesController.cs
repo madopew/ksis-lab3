@@ -41,13 +41,13 @@ namespace FileServer.Controllers
         }
 
         [HttpPost("create")]
-        public ActionResult CreateDirectoryRoot(string name)
+        public ActionResult<DirectoryEntry> CreateDirectoryRoot(string name)
         {
             return CreateDirectory(string.Empty, name);
         }
 
         [HttpPost("create/{*path}")]
-        public ActionResult CreateDirectory(string path, string name)
+        public ActionResult<DirectoryEntry> CreateDirectory(string path, string name)
         {
             DirectoryEntry entry;
             try
@@ -97,6 +97,28 @@ namespace FileServer.Controllers
             }
 
             return Ok();
+        }
+
+        [HttpPost("upload")]
+        public ActionResult<DirectoryEntry> UploadFile(FileUpload fileUpload)
+        {
+            return UploadFile(string.Empty, fileUpload);
+        }
+
+        [HttpPost("upload/{*path}")]
+        public ActionResult<DirectoryEntry> UploadFile(string path, FileUpload fileUpload)
+        {
+            DirectoryEntry result;
+            try
+            {
+                result = fileService.UploadFile(path, fileUpload);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return Ok(result);
         }
     }
 }

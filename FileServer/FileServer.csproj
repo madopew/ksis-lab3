@@ -8,4 +8,8 @@
     <PackageReference Include="MimeTypeMapOfficial" Version="1.0.15" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data" />
+  </ItemGroup>
+
 </Project>

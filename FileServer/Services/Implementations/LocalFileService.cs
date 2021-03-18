@@ -100,6 +100,58 @@ namespace FileServer.Services.Implementations
             };
         }
 
+        public DirectoryEntry UploadFile(string parentPath, FileUpload file)
+        {
+            var parentAbsolutePath = Path.Combine(RootPath, parentPath);
+            parentAbsolutePath = Path.GetFullPath(parentAbsolutePath);
+            
+            if (!Directory.Exists(parentAbsolutePath))
+            {
+                throw new ArgumentException("Directory does not exist!");
+            }
+            
+            if (string.IsNullOrWhiteSpace(file.Name))
+            {
+                throw new ArgumentException("Name is empty!");
+            }
+            
+            if (string.IsNullOrWhiteSpace(file.ContentType))
+            {
+                throw new ArgumentException("Content type is empty!");
+            }
+            
+            if (string.IsNullOrWhiteSpace(file.FileBase64))
+            {
+                throw new ArgumentException("Data is empty!");
+            }
+
+            string fileName;
+            try
+            {
+                fileName = file.Name + $"{MimeTypeMap.GetExtension(file.ContentType)}";
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("Content type is incorrect!");
+            }
+            var fileAbsolutePath = Path.Combine(parentAbsolutePath, fileName);
+
+            if (File.Exists(fileAbsolutePath))
+            {
+                throw new ArgumentException("File already exists!");
+            }
+
+            using var createdFile = new FileStream(fileAbsolutePath, FileMode.Create);
+            createdFile.Write(Convert.FromBase64String(file.FileBase64));
+
+            return new DirectoryEntry
+            {
+                Type = DirectoryEntryType.File,
+                Name = fileName,
+                Path = Normalize(Path.GetRelativePath(RootPath, fileAbsolutePath)),
+            };
+        }
+
         public void DeleteEntry(string path)
         {
             if (string.IsNullOrWhiteSpace(path))
