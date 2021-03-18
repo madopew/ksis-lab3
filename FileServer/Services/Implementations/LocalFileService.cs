@@ -38,6 +38,8 @@ namespace FileServer.Services.Implementations
                     Type = GetEntryType(entry),
                     Name = entry.Name,
                     Path = Normalize(relativePath),
+                    Size = size,
+                    LastModified = entry.LastWriteTime,                    
                 });
             }
             
@@ -73,6 +75,8 @@ namespace FileServer.Services.Implementations
                 Type = GetEntryType(createdDirectory),
                 Name = createdDirectory.Name,
                 Path = Normalize(directoryPath),
+                Size = -1,
+                LastModified = createdDirectory.LastWriteTime,
             };
         }
 
@@ -150,6 +154,8 @@ namespace FileServer.Services.Implementations
                 Type = DirectoryEntryType.File,
                 Name = fileName,
                 Path = Normalize(Path.GetRelativePath(RootPath, fileAbsolutePath)),
+                Size = createdFile.Length,
+                LastModified = DateTime.Now,
             };
         }
 
@@ -200,6 +206,8 @@ namespace FileServer.Services.Implementations
                 Type = DirectoryEntryType.Directory,
                 Name = "..",
                 Path = parentPath,
+                Size = -1,
+                LastModified = DateTime.MinValue,
             };
         }
 
