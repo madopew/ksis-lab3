@@ -3,8 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d"
-             d:DesignHeight="50" d:DesignWidth="350"
+             d:DesignHeight="20" d:DesignWidth="420"
              Cursor="Hand"
              MouseDoubleClick="FileContentView_OnMouseDoubleClick"
              DataContext="{Binding RelativeSource={RelativeSource Self}}">
@@ -24,6 +25,7 @@
         <TextBlock FontFamily="Courier New"
                    Foreground="White"
                    Width="150"
+                   Padding="5 0 0 0"
                    Text="{Binding FileName}"/>
         <TextBlock FontFamily="Courier New"
                    Foreground="White"
@@ -31,7 +33,26 @@
                    Text="{Binding SizeStr}"/>
         <TextBlock FontFamily="Courier New"
                    Foreground="White"
-                   Width="150"
+                   Width="130"
                    Text="{Binding DateStr}"/>
+        <fa:FontAwesome Icon="Times"
+                        Width="40"
+                        VerticalAlignment="Center"
+                        FontSize="10"
+                        Name="DeleteButton"
+                        MouseLeftButtonUp="DeleteButton_OnMouseLeftButtonUp">
+            <fa:FontAwesome.Style>
+                <Style TargetType="fa:FontAwesome">
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="False">
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground" Value="Red"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </fa:FontAwesome.Style>
+        </fa:FontAwesome>
     </StackPanel>
 </UserControl>
