@@ -65,6 +65,8 @@ namespace FileApiClient
             {
                 MessageBox.Show("Cannot list current directory", "Error", 
                     MessageBoxButton.OK, MessageBoxImage.Error);
+                CurrentPath = "";
+                return;
             }
 
             FilesPanel.Children.Clear();
@@ -74,7 +76,7 @@ namespace FileApiClient
 
         private void AddToPanel(DirectoryEntry entry)
         {
-            var fContent = new FileContentView(entry, Entry_OnDoubleClick);
+            var fContent = new FileContentView(entry, Entry_OnDoubleClick, Entry_OnDelete);
             FilesPanel.Children.Add(fContent);
         }
 
@@ -176,6 +178,33 @@ namespace FileApiClient
                 {
                     var response = await result.Content.ReadAsStringAsync();
                     MessageBox.Show(response, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private async void Entry_OnDelete(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is FontAwesome.WPF.FontAwesome fa)
+            {
+                var view = (FileContentView)((StackPanel)fa.Parent).Parent;
+                var deleteMsgResult = MessageBox.Show($"Do you want to delete {view.Entry.Name}?", "Delete",
+                    MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (deleteMsgResult == MessageBoxResult.Yes)
+                {
+                    var result = await client.DeleteAsync($"{ApiUrl}/delete/{view.Entry.Path}");
+
+                    if (result.IsSuccessStatusCode)
+                    {
+                        MessageBox.Show("Deletion complete!", "Delete", MessageBoxButton.OK,
+                            MessageBoxImage.Information);
+                        UpdatePanel();
+                    }
+                    else
+                    {
+                        var response = await result.Content.ReadAsStringAsync();
+                        MessageBox.Show(response, "Delete", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
             }
         }
